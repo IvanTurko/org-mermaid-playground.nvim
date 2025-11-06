@@ -1,4 +1,4 @@
-# mermaid-playground.nvim
+# org-mermaid-playground.nvim
 
 > **Note:** This is a fork of [selimacerbas/mermaid-playground.nvim](https://github.com/selimacerbas/mermaid-playground.nvim), adapted to work with Org files instead of Markdown.
 
@@ -13,7 +13,7 @@ Preview **Mermaid** diagrams from **Org files** — _instantly_ — in your brow
 ---
 ## Demo
 
-![mermaid](docs/demo/mermaid.gif) 
+![mermaid](docs/demo/mermaid.gif)
 
 ---
 
@@ -63,9 +63,9 @@ npm i -g live-server
   #+END_SRC
   ```
 
-- Start preview: **`<leader>mps`**  
-- Edit as you like; leaving insert or writing the buffer will **auto-refresh**.  
-- Force re-render: **`<leader>mpr`**  
+- Start preview: **`<leader>mps`**
+- Edit as you like; leaving insert or writing the buffer will **auto-refresh**.
+- Force re-render: **`<leader>mpr`**
 - Stop server: **`<leader>mpS`**
 
 > The first start opens your browser once. Subsequent refreshes **reuse the same tab**.
@@ -157,20 +157,20 @@ The preview HTML doesn’t hardcode a URL; it works with whatever port `live-ser
 
 ## 🛠 Troubleshooting
 
-**Browser shows “Cannot GET /index.html”.**  
+**Browser shows “Cannot GET /index.html”.**
 Make sure the server is started **in the same directory** as the workspace. This plugin does that automatically; if you customized `workspace_dir`, double-check the path exists and is writable.
 
-**No diagram updates.**  
+**No diagram updates.**
 - Ensure your cursor was inside a `#+BEGIN_SRC mermaid` block when you started.
 - Check `auto_refresh_events` and `debounce_ms`. Try a manual refresh with `<leader>mpr`.
 
-**Still seeing “boom” error graphics** under the preview.  
+**Still seeing “boom” error graphics** under the preview.
 Replace your `index.html` with the one shipped in the plugin (`assets/index.html`) or set `overwrite_index_on_start = true` once to copy the latest.
 
-**Port already in use / multiple servers.**  
+**Port already in use / multiple servers.**
 Use `<leader>mpS` to stop, change the port in `live-server.nvim`, then `<leader>mps` again.
 
-**Windows paths.**  
+**Windows paths.**
 The global workspace resolves via `vim.loop.os_homedir()`; if you prefer a custom directory, set `workspace_dir` explicitly.
 
 ---
@@ -207,8 +207,8 @@ mermaid-playground.nvim/
 
 ## 🙌 Thanks
 
-- [Mermaid](https://mermaid.js.org/) for the diagram engine  
-- [Iconify](https://iconify.design/) packs for easy service logos  
+- [Mermaid](https://mermaid.js.org/) for the diagram engine
+- [Iconify](https://iconify.design/) packs for easy service logos
 - [live-server.nvim](https://github.com/barrett-ruth/live-server.nvim) for the lightweight dev server
 - The original plugin [mermaid-playground.nvim](https://github.com/selimacerbas/mermaid-playground.nvim) and its author [selimacerbas](https://github.com/selimacerbas).
 
