@@ -49,7 +49,7 @@ function M.extract_under_cursor(bufnr)
 end
 
 -- Fallback: simple regex scan for the nearest mermaid block above the cursor
-function M.fallback_scan_org(bufnr)
+function M.fallback_scan(bufnr)
 	local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
 	local row = vim.api.nvim_win_get_cursor(0)[1]
 	local i = row
