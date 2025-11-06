@@ -1,8 +1,10 @@
 # mermaid-playground.nvim
 
-Preview **Mermaid** diagrams from Markdown — _instantly_ — in your browser.
+> **Note:** This is a fork of [selimacerbas/mermaid-playground.nvim](https://github.com/selimacerbas/mermaid-playground.nvim), adapted to work with Org files instead of Markdown.
 
-- Uses the **fenced \` ```mermaid \`** block **under your cursor**
+Preview **Mermaid** diagrams from **Org files** — _instantly_ — in your browser.
+
+- Uses the **`#+BEGIN_SRC mermaid`** block **under your cursor**
 - Writes the diagram to **`~/.config/mermaid-playground/diagram.mmd`** (global workspace)
 - Serves a minimal, beautiful **live preview** via [`live-server.nvim`](https://github.com/barrett-ruth/live-server.nvim)
 - **Auto-refreshes** on edit (debounced) and **reuses the same tab** (no tab spam)
@@ -50,15 +52,15 @@ npm i -g live-server
 
 3) **Use it**
 
-- Put your cursor **inside a fenced Mermaid block** in a Markdown file:
+- Put your cursor **inside a source Mermaid block** in an Org file:
 
-  ```markdown
-  ```mermaid
+  ```org
+  #+BEGIN_SRC mermaid
   graph TD
     A[Start] --> B{Is it good?}
     B -->|Yes| C[Ship it]
     B -->|No| D[Fix it]
-  ```
+  #+END_SRC
   ```
 
 - Start preview: **`<leader>mps`**  
@@ -131,7 +133,7 @@ require("mermaid_playground").setup({
 })
 ```
 
-> Uses Tree-sitter to locate the fenced block under the cursor (with a regex fallback). Any fenced block labelled `mermaid` is supported.
+> Uses Tree-sitter to locate the source block under the cursor (with a regex fallback). Any source block labelled `mermaid` is supported.
 
 ---
 
@@ -139,7 +141,7 @@ require("mermaid_playground").setup({
 
 - **Neovim** 0.9+ recommended
 - **[live-server.nvim](https://github.com/barrett-ruth/live-server.nvim)** and **`live-server`** (npm global)
-- **Tree-sitter** with the **Markdown** parser installed (for best results)
+- **Tree-sitter** with the **Org** parser installed (for best results)
 
 `live-server.nvim` defaults to port **5555**. If something else uses that port:
 
@@ -159,7 +161,7 @@ The preview HTML doesn’t hardcode a URL; it works with whatever port `live-ser
 Make sure the server is started **in the same directory** as the workspace. This plugin does that automatically; if you customized `workspace_dir`, double-check the path exists and is writable.
 
 **No diagram updates.**  
-- Ensure your cursor was inside a ` ```mermaid ` block when you started.
+- Ensure your cursor was inside a `#+BEGIN_SRC mermaid` block when you started.
 - Check `auto_refresh_events` and `debounce_ms`. Try a manual refresh with `<leader>mpr`.
 
 **Still seeing “boom” error graphics** under the preview.  
@@ -208,6 +210,6 @@ mermaid-playground.nvim/
 - [Mermaid](https://mermaid.js.org/) for the diagram engine  
 - [Iconify](https://iconify.design/) packs for easy service logos  
 - [live-server.nvim](https://github.com/barrett-ruth/live-server.nvim) for the lightweight dev server
+- The original plugin [mermaid-playground.nvim](https://github.com/selimacerbas/mermaid-playground.nvim) and its author [selimacerbas](https://github.com/selimacerbas).
 
 PRs and ideas welcome!
-
