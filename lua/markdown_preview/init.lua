@@ -265,6 +265,13 @@ function M.start()
 		local index_path = vim.fs.joinpath(dir, M.config.index_name)
 		pcall(ls_server.update_target, M._server_instance, dir, index_path)
 		pcall(ls_server.reload, M._server_instance, M.config.content_name)
+
+		-- No browser tab connected (user closed it)? Re-open.
+		if M.config.open_browser and ls_server.connected_client_count(M._server_instance) == 0 then
+			vim.defer_fn(function()
+				util.open_in_browser(("http://127.0.0.1:%d/"):format(M.config.port))
+			end, 200)
+		end
 	end
 end
 
