@@ -107,6 +107,18 @@ local function extract_mermaid_under_cursor(bufnr)
 	return fallback
 end
 
+local function extract_mermaid_under_cursor_org(bufnr)
+	local ok, text = pcall(ts.extract_under_cursor_for_org, bufnr)
+	if ok and text and #text > 0 then
+		return text
+	end
+	local fallback = ts.fallback_scan_for_org(bufnr)
+	if not fallback or #fallback == 0 then
+		error("No #+BEGIN_SRC mermaid block found under (or above) the cursor")
+	end
+	return fallback
+end
+
 ---------------------------------------------------------------------------
 -- mermaid-rs-renderer (mmdr) integration
 ---------------------------------------------------------------------------
@@ -243,6 +255,10 @@ local function get_content(bufnr)
 		-- .mmd / .mermaid files: treat entire buffer as mermaid
 		local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
 		text = "```mermaid\n" .. table.concat(lines, "\n") .. "\n```\n"
+	elseif ft == "org" then
+		-- Org-mode files: extract mermaid block under cursor, wrap in code fence
+		local mermaid_text = extract_mermaid_under_cursor_org(bufnr)
+		text = "```mermaid\n" .. mermaid_text .. "\n```\n"
 	else
 		-- Other filetypes: extract mermaid block under cursor, wrap in code fence
 		local mermaid_text = extract_mermaid_under_cursor(bufnr)
@@ -256,6 +272,7 @@ local function get_content(bufnr)
 
 	return text
 end
+
 
 ---Same as get_content but never errors (returns nil on failure).
 ---@param bufnr integer
