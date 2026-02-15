@@ -1,19 +1,47 @@
-# markdown-preview.nvim
+# markup-preview.nvim
 
-> **Note:** This repository was previously known as `mermaid-playground.nvim`. It has been renamed and rewritten to support full Markdown preview alongside first-class Mermaid diagram support.
+Live preview for markup documents in Neovim.
 
-Live **Markdown preview** for Neovim with first-class **Mermaid diagram** support.
+Supports:
+- Markdown documents
+- Mermaid diagrams
+- Org-mode Mermaid blocks
 
-- Renders your entire `.md` file in the browser — headings, tables, code blocks, everything
-- **Mermaid diagrams** render inline as interactive SVGs (click to expand, zoom, pan, export)
-- **Instant updates** via Server-Sent Events (no polling)
-- **Syntax highlighting** for code blocks (highlight.js)
-- Dark / Light theme toggle with colored heading accents
-- **Optional Rust-powered rendering** — use [`mermaid-rs-renderer`](https://github.com/mermaid-rs/mermaid-rs-renderer) for ~400x faster mermaid diagrams
-- **Zero external dependencies** — no npm, no Node.js, just Neovim + your browser
-- Powered by [`live-server.nvim`](https://github.com/selimacerbas/live-server.nvim) (pure Lua HTTP server)
+This plugin is a fork of `selimacerbas/markdown-preview.nvim`,
+extended with Org-mode support for Mermaid diagrams.
 
----
+It allows you to write diagrams and structured notes in Org or Markdown
+and preview them instantly in the browser using the same fast rendering pipeline.
+
+## What this fork adds
+
+Compared to the original project, this version adds:
+
+- Extraction of **Mermaid diagrams from Org files**
+- Previewing diagrams inside `#+begin_src mermaid` blocks
+- A workflow that supports **Org as an authoring format**
+- The same fast browser preview pipeline used for Markdown
+
+Example Org block:
+
+```org
+#+begin_src mermaid
+graph TD
+A --> B
+#+end_src
+```
+
+## Features
+
+- Renders entire **Markdown documents** in the browser
+- Extracts and renders **Mermaid diagrams from Org files**
+- Interactive Mermaid SVG diagrams (zoom, pan, export)
+- Instant updates via **Server-Sent Events (no polling)**
+- Syntax highlighting via **highlight.js**
+- Dark / Light theme toggle
+- Optional **Rust-powered Mermaid rendering (~400x faster)**
+- No **Node.js** or **npm** required
+- Powered by **live-server.nvim** (pure Lua HTTP server)
 
 ## Quick start
 
@@ -21,10 +49,10 @@ Live **Markdown preview** for Neovim with first-class **Mermaid diagram** suppor
 
 ```lua
 {
-  "selimacerbas/markdown-preview.nvim",
+  "IvanTurko/markup-preview.nvim",
   dependencies = { "selimacerbas/live-server.nvim" },
   config = function()
-    require("markdown_preview").setup({
+    require("markup_preview").setup({
       -- all optional; sane defaults shown
       port = 8421,
       open_browser = true,
@@ -40,10 +68,10 @@ No prereqs. No `npm install`. Just install and go.
 
 Open any Markdown file, then:
 
-- **Start preview:** `:MarkdownPreview`
+- **Start preview:** `:MarkupPreview`
 - **Edit freely** — the browser updates instantly as you type
-- **Force refresh:** `:MarkdownPreviewRefresh`
-- **Stop:** `:MarkdownPreviewStop`
+- **Force refresh:** `:MarkupPreviewRefresh`
+- **Stop:** `:MarkupPreviewStop`
 
 > The first start opens your browser. Subsequent updates reuse the same tab.
 
@@ -55,18 +83,18 @@ For **other non-markdown files**, place your cursor inside a fenced ```` ```merm
 
 ## Commands
 
-| Command                  | Description          |
-|--------------------------|----------------------|
-| `:MarkdownPreview`       | Start preview        |
-| `:MarkdownPreviewRefresh`| Force refresh        |
-| `:MarkdownPreviewStop`   | Stop preview         |
+| Command                | Description          |
+|------------------------|----------------------|
+| `:MarkupPreview`       | Start preview        |
+| `:MarkupPreviewRefresh`| Force refresh        |
+| `:MarkupPreviewStop`   | Stop preview         |
 
 No keymaps are set by default — map them however you like. Suggested:
 
 ```lua
-vim.keymap.set("n", "<leader>mps", "<cmd>MarkdownPreview<cr>", { desc = "Markdown: Start preview" })
-vim.keymap.set("n", "<leader>mpS", "<cmd>MarkdownPreviewStop<cr>", { desc = "Markdown: Stop preview" })
-vim.keymap.set("n", "<leader>mpr", "<cmd>MarkdownPreviewRefresh<cr>", { desc = "Markdown: Refresh preview" })
+vim.keymap.set("n", "<leader>mps", "<cmd>MarkupPreview<cr>", { desc = "Markup: Start preview" })
+vim.keymap.set("n", "<leader>mpS", "<cmd>MarkupPreviewStop<cr>", { desc = "Markup: Stop preview" })
+vim.keymap.set("n", "<leader>mpr", "<cmd>MarkupPreviewRefresh<cr>", { desc = "Markup: Refresh preview" })
 ```
 
 ---
@@ -90,7 +118,7 @@ The preview opens a polished browser app with:
 ## Configuration
 
 ```lua
-require("markdown_preview").setup({
+require("markup_preview").setup({
   port = 8421,                          -- server port
   open_browser = true,                  -- auto-open browser on start
 
@@ -158,7 +186,7 @@ Rendered preview (scroll preserved, no flicker)
 - **Other files**: The mermaid block under the cursor is extracted (via Tree-sitter or regex fallback) and wrapped in a code fence
 - **SSE** (Server-Sent Events) from `live-server.nvim` push updates instantly — no polling
 - **morphdom** diffs the DOM efficiently, preserving scroll position and interactive state
-- **Per-buffer workspaces** under `~/.cache/nvim/markdown-preview/<hash>/` prevent collisions between Neovim instances
+- **Per-buffer workspaces** under `~/.cache/nvim/markup-preview/<hash>/` prevent collisions between Neovim instances
 
 ---
 
@@ -190,23 +218,6 @@ Browser-side libraries are loaded from CDN (cached by your browser):
 **Port conflict**
 - Stop with `<leader>mpS`, change `port` in config, restart with `<leader>mps`
 
----
-
-## Project structure
-
-```
-markdown-preview.nvim/
-├─ plugin/markdown-preview.lua       -- commands + keymaps
-├─ lua/markdown_preview/
-│  ├─ init.lua                       -- main logic (server, refresh, workspace)
-│  ├─ util.lua                       -- fs helpers, workspace resolution
-│  └─ ts.lua                         -- Tree-sitter mermaid extractor + fallback
-└─ assets/
-   └─ index.html                     -- browser preview app
-```
-
----
-
 ## Thanks
 
 - [Mermaid](https://mermaid.js.org/) for the diagram engine
@@ -215,4 +226,3 @@ markdown-preview.nvim/
 - [highlight.js](https://highlightjs.org/) for syntax highlighting
 - [morphdom](https://github.com/patrick-steele-idem/morphdom) for efficient DOM updates
 
-PRs and ideas welcome!

@@ -1,4 +1,3 @@
--- lua/markdown_preview/util.lua
 local M = {}
 
 local sep = package.config:sub(1, 1)
@@ -59,7 +58,7 @@ function M.resolve_asset(rel)
 	if this:sub(1, 1) == "@" then
 		this = this:sub(2)
 	end
-	local root = this:match("(.-)" .. sep .. "lua" .. sep .. "markdown_preview" .. sep .. "util%.lua$")
+	local root = this:match("(.-)" .. sep .. "lua" .. sep .. "markup_preview" .. sep .. "util%.lua$")
 	if root then
 		local candidate = table.concat({ root, rel }, sep)
 		if M.file_exists(candidate) then
@@ -89,7 +88,7 @@ end
 function M.workspace_for_buffer(bufnr)
 	local name = vim.api.nvim_buf_get_name(bufnr)
 	local hash = vim.fn.sha256(name):sub(1, 12)
-	return vim.fs.joinpath(vim.fn.stdpath("cache"), "markdown-preview", hash)
+	return vim.fs.joinpath(vim.fn.stdpath("cache"), "markup-preview", hash)
 end
 
 return M

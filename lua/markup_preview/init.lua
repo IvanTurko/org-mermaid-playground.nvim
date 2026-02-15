@@ -1,6 +1,5 @@
--- lua/markdown_preview/init.lua
-local ts = require("markdown_preview.ts")
-local util = require("markdown_preview.util")
+local ts = require("markup_preview.ts")
+local util = require("markup_preview.util")
 local ls_server = require("live_server.server")
 
 local M = {}
@@ -132,7 +131,7 @@ local function is_mmdr_available()
 	M._mmdr_available = vim.fn.executable("mmdr") == 1
 	if not M._mmdr_available then
 		vim.notify(
-			"Markdown Preview: mermaid_renderer='rust' but `mmdr` not found in PATH.\n"
+			"Markup Preview: mermaid_renderer='rust' but `mmdr` not found in PATH.\n"
 				.. "Install: cargo install mermaid-rs-renderer\n"
 				.. "Falling back to browser-side mermaid.js.",
 			vim.log.levels.WARN
@@ -317,7 +316,7 @@ local function maybe_refresh(bufnr, silent)
 	end
 
 	if not silent and M.config.notify_on_refresh then
-		vim.notify("Markdown preview updated", vim.log.levels.INFO)
+		vim.notify("Markup Preview updated", vim.log.levels.INFO)
 	end
 	return true
 end
@@ -344,7 +343,7 @@ local function set_autocmds_for_buffer(bufnr)
 	if M._augroup then
 		pcall(vim.api.nvim_del_augroup_by_id, M._augroup)
 	end
-	M._augroup = vim.api.nvim_create_augroup("MarkdownPreviewAuto", { clear = true })
+	M._augroup = vim.api.nvim_create_augroup("MarkupPreviewAuto", { clear = true })
 
 	for _, ev in ipairs(M.config.auto_refresh_events) do
 		vim.api.nvim_create_autocmd(ev, {
@@ -353,7 +352,7 @@ local function set_autocmds_for_buffer(bufnr)
 			callback = function()
 				debounced_refresh(bufnr)
 			end,
-			desc = "Markdown Preview auto-refresh (debounced)",
+			desc = "Markup Preview auto-refresh (debounced)",
 		})
 	end
 end
@@ -368,7 +367,7 @@ function M.start()
 
 	local ok_content, text = pcall(get_content, bufnr)
 	if not ok_content then
-		vim.notify("Markdown Preview: " .. tostring(text), vim.log.levels.ERROR)
+		vim.notify("Markup Preview: " .. tostring(text), vim.log.levels.ERROR)
 		return
 	end
 	local dir = ensure_workspace(bufnr)
@@ -398,7 +397,7 @@ function M.start()
 		})
 		if not ok then
 			vim.notify(
-				("Markdown Preview: failed to start server on port %d — %s"):format(M.config.port, tostring(inst)),
+				("Markup Preview: failed to start server on port %d — %s"):format(M.config.port, tostring(inst)),
 				vim.log.levels.ERROR
 			)
 			return
@@ -429,7 +428,7 @@ function M.refresh()
 	local bufnr = vim.api.nvim_get_current_buf()
 	local changed = maybe_refresh(bufnr, false)
 	if not changed and M.config.notify_on_refresh then
-		vim.notify("Markdown Preview: no changes detected", vim.log.levels.INFO)
+		vim.notify("Markup Preview: no changes detected", vim.log.levels.INFO)
 	end
 end
 
